@@ -71,7 +71,7 @@ class _FoodPoster extends StatelessWidget {
         children: [
           const FadeInImage(
             alignment: Alignment.center,
-            placeholder: AssetImage('assets/img/no-image.jpg'),
+            placeholder: AssetImage('assets/img/loading.gif'),
             image: AssetImage('assets/img/no-image.jpg'),
             width: 140,
             height: 200,
