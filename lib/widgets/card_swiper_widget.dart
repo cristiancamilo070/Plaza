@@ -85,13 +85,13 @@ class _FoodPoster extends StatelessWidget {
               const SizedBox( width: 15 ),
               ElevatedButton.icon(
                 autofocus: true,
-                onPressed: () {},
+                onPressed: () {Navigator.pushNamed(context, 'esp');},
                 icon: const Icon(Icons.favorite, size: 18), label: const Text(""),
               ),
               const SizedBox( width: 15 ),
               ElevatedButton.icon(
                 autofocus: true,
-                onPressed: () {},
+                onPressed: () {Navigator.pushNamed(context, 'esp');},
                 icon: const Icon(Icons.shopping_basket_outlined, size: 25), label: const Text('')
               )
             ],
