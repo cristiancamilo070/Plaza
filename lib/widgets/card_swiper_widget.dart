@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class CardSlider extends StatefulWidget {
   const CardSlider({Key? key}) : super(key: key);
@@ -12,6 +15,29 @@ class CardSlider extends StatefulWidget {
 class _CardSliderState extends State<CardSlider> {
 
   final ScrollController scrollController = ScrollController();
+  Map? mapResponse;
+
+  Future apiCall()async{
+    http.Response response;
+    
+    //https://reqres.in/api/users/2 exercise vidio
+    response=await http.get(Uri.parse("https://api.bazzaio.com/v5/listados/listar_productos_tienda/590/0"));
+    if(response.statusCode==200){
+        setState(() {
+          //stringResponse=response.body;
+          mapResponse=json.decode(response.body);
+          //dataResponse=mapResponse!["1"];          
+          //key=mapResponse!.keys.toList();
+          //val = mapResponse![key[0]];
+        });
+    }
+  }
+
+  @override
+    void initState() {
+      apiCall();
+      super.initState();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +56,64 @@ class _CardSliderState extends State<CardSlider> {
           const SizedBox( height: 20 ),
 
           Expanded(
-            child: GridView.builder(
+            child: mapResponse==null           ?        const Center(child:  CircularProgressIndicator(color: Colors.green,)): 
+            GridView.builder(
                 gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
                    crossAxisCount: MediaQuery.of(context).orientation == Orientation.landscape ? 3: 2,
-                   crossAxisSpacing: 10,
+                   //rossAxisSpacing: 10,
                    mainAxisSpacing: 1,
-                   childAspectRatio: (1.7/1),
+                   childAspectRatio: (1.6/1),
                 ),
                 scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: ( _, int index) => _FoodPoster( ),
+                itemCount: mapResponse!['data'].length,
+                itemBuilder: (BuildContext context, int index) => 
+                Container(
+                    width: 130,
+                    height: 180,
+                    color: Colors.grey.shade300,
+                    margin: const EdgeInsets.symmetric(horizontal: 1),
+                    child: Column(
+                      children: [
+                        Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 6,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                          child: FadeInImage.assetNetwork(
+                            alignment: Alignment.center,
+                            placeholder: 'assets/img/loading.gif',
+                            image:mapResponse!['data'][index]["imagen"].toString() ,
+                            width: 155,
+                            height: 180,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Text(mapResponse!['data'][index]["nombre"].toString()),
+                        Text('Precio: '+mapResponse!['data'][index]["precio"].toString()),
+                        //Text(key[index].toString()),
+                        Row(
+                          children: [
+                            const SizedBox( width: 15 ),
+                            ElevatedButton.icon(
+                              autofocus: true,
+                              onPressed: () {Navigator.pushNamed(context, 'esp');},
+                              icon: const Icon(Icons.favorite, size: 18), label: Text(mapResponse!['data'][index]["likes"].toString()),
+                            ),
+                            const SizedBox( width: 15 ),
+                            ElevatedButton.icon(
+                              autofocus: true,
+                              onPressed: () {Navigator.pushNamed(context, 'esp');},
+                              icon: const Icon(Icons.shopping_basket_outlined, size: 25), label: const Text('')
+                            )
+                          ],
+
+                        )
+                      ],
+                    ),
+                  ),
                 addSemanticIndexes: true,
                 shrinkWrap: true,
               ),
@@ -49,54 +123,6 @@ class _CardSliderState extends State<CardSlider> {
           const SizedBox( height: 10 ),
 
          
-        ],
-      ),
-    );
-  }
-}
-
-
-class _FoodPoster extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-
- 
-    return Container(
-      width: 130,
-      height: 200,
-      color: Colors.grey.shade300,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      child: Column(
-        children: [
-          const FadeInImage(
-            alignment: Alignment.center,
-            placeholder: AssetImage('assets/img/loading.gif'),
-            image: AssetImage('assets/img/no-image.jpg'),
-            width: 140,
-            height: 200,
-            fit: BoxFit.cover,
-           ),
-          const Text('nombre'),
-          const Text('Precio viejo'),
-          const Text('Precio nuevo'),
-          Row(
-            children: [
-              const SizedBox( width: 15 ),
-              ElevatedButton.icon(
-                autofocus: true,
-                onPressed: () {Navigator.pushNamed(context, 'esp');},
-                icon: const Icon(Icons.favorite, size: 18), label: const Text(""),
-              ),
-              const SizedBox( width: 15 ),
-              ElevatedButton.icon(
-                autofocus: true,
-                onPressed: () {Navigator.pushNamed(context, 'esp');},
-                icon: const Icon(Icons.shopping_basket_outlined, size: 25), label: const Text('')
-              )
-            ],
-
-          )
         ],
       ),
     );
