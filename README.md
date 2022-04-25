@@ -1,5 +1,5 @@
 # plaza
-
+not complete yet
 <h1> Versión de flutter utilizada 2.5.3 </h1>
 
 ##  Packages utilizados
