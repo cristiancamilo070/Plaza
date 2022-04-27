@@ -5,7 +5,6 @@ import 'package:plaza/pages/home_page.dart';
 import 'package:plaza/pages/product_page.dart';
 import 'package:plaza/pages/profile_page.dart';
 import 'package:plaza/pages/single_product_page.dart';
-import 'package:plaza/providers/products_provider.dart';
 import 'package:plaza/providers/ui_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +19,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_)=>UiProvider()),
-        ChangeNotifierProvider(create: ( _ ) => ProductProvider(), lazy: false ),
+        // ChangeNotifierProvider(create: ( _ ) => ProductProvider(),
+        //  lazy: false 
+        // ),
       ],
 
 
